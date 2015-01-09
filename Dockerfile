@@ -15,5 +15,7 @@ RUN apt-get update
 RUN apt-get install elasticsearch
 RUN find /usr/share/elasticsearch/bin -executable -type f | xargs -i ln -s "{}" "/usr/local/bin/"
 
+EXPOSE 9200 9300
+
 CMD ["elasticsearch"]
 
