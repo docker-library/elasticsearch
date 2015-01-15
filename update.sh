@@ -10,6 +10,6 @@ current=$(curl -sSL 'http://www.elasticsearch.org/download' | grep -o 'elasticse
 sed -ri -e 's/^(ENV ELASTICSEARCH_VERSION) .*/\1 '"$current"'/' "Dockerfile"
 
 #Download the new default configuration from the official site.
-curl "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${current}.tar.gz" | tar zxv
-mv "elasticsearch-$current/config" "config"
+curl "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${current}.tar.gz" | tar zx
+rm -rf config && mv "elasticsearch-$current/config" "config"
 rm -rf "elasticsearch-$current"
