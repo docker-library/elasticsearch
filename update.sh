@@ -3,13 +3,14 @@ set -e
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
-#Grab the current version from their wonderful website.
-current=$(curl -sSL 'http://www.elasticsearch.org/download' | grep -o 'elasticsearch.*"version".*[0-9]\.[0-9]\.[0-9]' | grep -o '[0-9]\.[0-9]\.[0-9]')
+versions=( */ )
+versions=( "${versions[@]%/}" )
+downloadable=$(curl -sSL 'http://www.elasticsearch.org/downloads' | sed -rn 's/.*?http:\/\/www.elasticsearch.org\/downloads\/.-.-.\/\">Download v (.\..\..)<.*/\1/gp')
 
-#Replace version ENV line in Dockerfile with the current version.
-sed -ri -e 's/^(ENV ELASTICSEARCH_VERSION) .*/\1 '"$current"'/' "Dockerfile"
-
-#Download the new default configuration from the official site.
-curl "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${current}.tar.gz" | tar zx
-rm -rf config && mv "elasticsearch-$current/config" "config"
-rm -rf "elasticsearch-$current"
+for version in "${versions[@]}"; do
+	recent=$(echo "$downloadable" | grep -m 1 "$version")
+	sed -ri -e 's/^(ENV ELASTICSEARCH_VERSION) .*/\1 '"$recent"'/' "$version/Dockerfile"
+	curl "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${recent}.tar.gz" \
+		| tar zx --strip 1 "elasticsearch-$recent/config"
+	rsync -avP --delete "config/" "$version/config" && rm -rf "config"
+done
