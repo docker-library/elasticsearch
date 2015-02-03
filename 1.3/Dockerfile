@@ -13,6 +13,8 @@ RUN apt-get update \
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 COPY config /usr/share/elasticsearch/config
 
+VOLUME /usr/share/elasticsearch/data
+
 EXPOSE 9200 9300
 
 CMD ["elasticsearch"]
