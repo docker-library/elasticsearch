@@ -5,7 +5,7 @@ cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
 versions=( */ )
 versions=( "${versions[@]%/}" )
-downloadable=$(curl -sSL 'http://www.elasticsearch.org/downloads' | sed -rn 's/.*?http:\/\/www.elasticsearch.org\/downloads\/.-.-.\/\">Download v (.\..\..)<.*/\1/gp')
+downloadable=$(curl -sSL 'http://www.elasticsearch.org/downloads' | sed -rn 's!.*?http://www.elasticsearch.org/downloads/[0-9]+-[0-9]+-[0-9]+/">Download v ([0-9]+\.[0-9]+\.[0-9]+)<.*!\1!gp')
 
 for version in "${versions[@]}"; do
 	recent=$(echo "$downloadable" | grep -m 1 "$version")
