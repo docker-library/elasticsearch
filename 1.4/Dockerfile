@@ -11,7 +11,7 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
-COPY config /usr/share/elasticsearch/config
+COPY config /usr/share/elasticsearch/config/
 
 VOLUME /usr/share/elasticsearch/data
 
