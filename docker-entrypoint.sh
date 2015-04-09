@@ -14,7 +14,7 @@ RUN_AS_USER=${RUN_AS/:*/}
 if [ "$1" = 'elasticsearch' -a  "$RUN_AS_USER" != '0' -a "$RUN_AS_USER" != 'root' ]; then
 	# Change the ownership of /usr/share/elasticsearch/data to elasticsearch
 	chown -R $RUN_AS /usr/share/elasticsearch/data
-	exec gosu $RUN_AS_USER "$@"
+	exec gosu $RUN_AS "$@"
 fi
 
 # As argument is not related to elasticsearch,
