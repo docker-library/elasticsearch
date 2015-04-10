@@ -9,8 +9,13 @@ fi
 
 # Drop root privileges if we are running elasticsearch
 if [ "$1" = 'elasticsearch' ]; then
-	# Change the ownership of /usr/share/elasticsearch/data to elasticsearch
-	chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
+    # Change ownership of directories holding
+    # persisted data (indices and logs)
+    # so that elasticsearch can modify their content
+    for dir in data logs ; do
+        [ -d "/usr/share/elasticsearch/$dir" ] && \
+        chown -R elasticsearch:elasticsearch "/usr/share/elasticsearch/$dir"
+    done
 	exec gosu elasticsearch "$@"
 fi
 
