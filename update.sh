@@ -2,7 +2,7 @@
 set -e
 
 SED=${SED:-sed}
-cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
+cd "${0%/*}"
 
 versions=( */ )
 versions=( "${versions[@]%/}" )
