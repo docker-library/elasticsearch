@@ -4,7 +4,7 @@ set -e
 
 # Add elasticsearch as command if needed
 if [ "${1:0:1}" = '-' ]; then
-	set -- elasticsearch "$@"
+    set -- elasticsearch "$@"
 fi
 
 # Drop root privileges if we are running elasticsearch
@@ -16,7 +16,7 @@ if [ "$1" = 'elasticsearch' ]; then
         [ -d "/usr/share/elasticsearch/$dir" ] && \
         chown -R elasticsearch:elasticsearch "/usr/share/elasticsearch/$dir"
     done
-	exec gosu elasticsearch "$@"
+    exec gosu elasticsearch "$@"
 fi
 
 # As argument is not related to elasticsearch,
