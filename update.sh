@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [[  $(uname) == "Darwin" ]]; then
+if [ $(uname) = "Darwin" ]; then
 	SED=gsed
 	RL_OPTS=""
 else
