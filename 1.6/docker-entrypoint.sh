@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 # Add elasticsearch as command if needed
 if [ "${1:0:1}" = '-' ]; then
@@ -11,8 +12,11 @@ fi
 if [ "$1" = 'elasticsearch' ]; then
 	# Change the ownership of /usr/share/elasticsearch/data to elasticsearch
 	chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
-	exec gosu elasticsearch "$@"
-fi
+  perl -pi -e "s/%ELASTICSEARCH_CLUSTER%/cluster-${RANDOM}${RANDOM}/" \
+              /usr/share/elasticsearch/config/elasticsearch.yml
+
+  exec gosu elasticsearch "$@"
+fi  
 
 # As argument is not related to elasticsearch,
 # then assume that user wants to run his own process,
