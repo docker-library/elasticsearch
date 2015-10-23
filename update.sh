@@ -25,13 +25,12 @@ for version in "${versions[@]}"; do
 	fi
 	(
 		set -x
-		cp docker-entrypoint.sh Dockerfile.template "$version/"
-		mv "$version/Dockerfile.template" "$version/Dockerfile"
-		sed -i '
+		cp docker-entrypoint.sh "$version/"
+		sed '
 			s/%%ELASTICSEARCH_MAJOR%%/'"$version"'/g;
 			s/%%ELASTICSEARCH_VERSION%%/'"$fullVersion"'/g;
 			s!%%ELASTICSEARCH_REPO_BASE%%!'"$repoBase"'!g;
-		' "$version/Dockerfile"
+		' Dockerfile.template > "$version/Dockerfile"
 	)
 done
 
