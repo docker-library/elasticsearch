@@ -36,7 +36,7 @@ RUN set -ex \
 		chown -R elasticsearch:elasticsearch "$path"; \
 	done
 
-COPY config/logging.yml /usr/share/elasticsearch/config/
+ONBUILD COPY config /usr/share/elasticsearch/config
 
 VOLUME /usr/share/elasticsearch/data
 
