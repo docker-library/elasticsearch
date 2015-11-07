@@ -33,10 +33,13 @@ RUN set -ex \
 		/usr/share/elasticsearch/config/scripts \
 	; do \
 		mkdir -p "$path"; \
-		chown -R elasticsearch:elasticsearch "$path"; \
 	done
 
 COPY config/logging.yml /usr/share/elasticsearch/config/
+
+RUN sed -i -E "s/# network.host:.*/network.host: 0.0.0.0/" /etc/elasticsearch/elasticsearch.yml \
+	&& cp /etc/elasticsearch/elasticsearch.yml /usr/share/elasticsearch/config \
+	&& chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/
 
 VOLUME /usr/share/elasticsearch/data
 
