@@ -4,14 +4,19 @@ set -e
 
 # Add elasticsearch as command if needed
 if [ "${1:0:1}" = '-' ]; then
-	set -- elasticsearch "$@"
+    set -- elasticsearch "$@"
 fi
 
 # Drop root privileges if we are running elasticsearch
 if [ "$1" = 'elasticsearch' ]; then
-	# Change the ownership of /usr/share/elasticsearch/data to elasticsearch
-	chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
-	exec gosu elasticsearch "$@"
+    # Change ownership of directories holding
+    # persisted data (indices and logs)
+    # so that elasticsearch can modify their content
+    for dir in data logs ; do
+        [ -d "/usr/share/elasticsearch/$dir" ] && \
+        chown -R elasticsearch:elasticsearch "/usr/share/elasticsearch/$dir"
+    done
+    exec gosu elasticsearch "$@"
 fi
 
 # As argument is not related to elasticsearch,
