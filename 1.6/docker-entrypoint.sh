@@ -8,10 +8,13 @@ if [ "${1:0:1}" = '-' ]; then
 fi
 
 # Drop root privileges if we are running elasticsearch
-if [ "$1" = 'elasticsearch' ]; then
+# allow the container to be stated with `--user`
+if [ "$1" = 'elasticsearch' -a "$(id -u)" = '0' ]; then
 	# Change the ownership of /usr/share/elasticsearch/data to elasticsearch
 	chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
-	exec gosu elasticsearch "$@"
+	
+	set -- gosu elasticsearch "$@"
+	#exec gosu elasticsearch "$BASH_SOURCE" "$@"
 fi
 
 # As argument is not related to elasticsearch,
