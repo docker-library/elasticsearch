@@ -16,6 +16,10 @@ ENV ELASTICSEARCH_MAJOR 2.1
 ENV ELASTICSEARCH_VERSION 2.1.1
 ENV ELASTICSEARCH_REPO_BASE http://packages.elasticsearch.org/elasticsearch/2.x/debian
 
+# Default config
+ENV CLUSTER_NAME elasticsearch
+ENV NODE_NAME Iron Man
+
 RUN echo "deb $ELASTICSEARCH_REPO_BASE stable main" > /etc/apt/sources.list.d/elasticsearch.list
 
 RUN set -x \
