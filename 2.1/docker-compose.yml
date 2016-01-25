@@ -1,5 +1,5 @@
 elasticsearch:
-  image: moifort/elasticsearch:2.1.1
+  image: elasticsearch:2.1.1
 #  volumes:
 #    - ./persistant_folder/data:/usr/share/elasticsearch/data
 #    - ./persistant_folder/logs:/usr/share/elasticsearch/logs
@@ -8,5 +8,5 @@ elasticsearch:
     - "9200:9200"
     - "9300:9300"
   environment:
-   - CLUSTER_NAME=myClusterName
-   - NODE_NAME=Tars
+   - CLUSTER_NAME=elasticsearch
+   - NODE_NAME=Iron Man
