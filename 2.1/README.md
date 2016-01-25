@@ -12,7 +12,7 @@ Elasticsearch is a registered trademark of Elasticsearch BV. More info https://e
 
 ```yml
 elasticsearch:
-  image: moifort/elasticsearch:2.1.1
+  image: elasticsearch:2.1.1
 #  volumes:
 #    - ./persistant_folder/data:/usr/share/elasticsearch/data
 #    - ./persistant_folder/logs:/usr/share/elasticsearch/logs
