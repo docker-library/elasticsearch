@@ -23,6 +23,7 @@ elasticsearch:
   environment:
    - CLUSTER_NAME=myClusterName
    - NODE_NAME=Tars
+  restart: always
 ```
 
 Remove `#` to persiste elasticsearch data, logs and installed plugins
