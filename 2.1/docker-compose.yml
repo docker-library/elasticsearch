@@ -8,5 +8,6 @@ elasticsearch:
     - "9200:9200"
     - "9300:9300"
   environment:
-   - CLUSTER_NAME=elasticsearch
-   - NODE_NAME=Iron Man
+    - CLUSTER_NAME=elasticsearch
+    - NODE_NAME=Iron Man
+  restart: always  
