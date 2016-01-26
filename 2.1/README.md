@@ -21,8 +21,8 @@ elasticsearch:
     - "9200:9200"
     - "9300:9300"
   environment:
-   - CLUSTER_NAME=myClusterName
-   - NODE_NAME=Tars
+    - CLUSTER_NAME=myClusterName
+    - NODE_NAME=Tars
   restart: always
 ```
 
