@@ -46,6 +46,7 @@ VOLUME /usr/share/elasticsearch/data
 
 COPY docker-entrypoint.sh /
 
+WORKDIR /usr/share/elasticsearch
 EXPOSE 9200 9300
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["elasticsearch"]
