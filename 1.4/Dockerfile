@@ -29,20 +29,22 @@ RUN set -x \
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
+WORKDIR /usr/share/elasticsearch
+
 RUN set -ex \
 	&& for path in \
-		/usr/share/elasticsearch/data \
-		/usr/share/elasticsearch/logs \
-		/usr/share/elasticsearch/config \
-		/usr/share/elasticsearch/config/scripts \
+		./data \
+		./logs \
+		./config \
+		./config/scripts \
 	; do \
 		mkdir -p "$path"; \
 		chown -R elasticsearch:elasticsearch "$path"; \
 	done
 
-COPY config /usr/share/elasticsearch/config
+COPY config ./config
 
-VOLUME /usr/share/elasticsearch/data
+VOLUME ./data
 
 COPY docker-entrypoint.sh /
 
