@@ -17,6 +17,10 @@ if [ "$1" = 'elasticsearch' -a "$(id -u)" = '0' ]; then
 	#exec gosu elasticsearch "$BASH_SOURCE" "$@"
 fi
 
+for f in /docker-entrypoint-initels.d/*; do
+	echo "$0: running $f"; . "$f"; echo ;; 
+done
+
 # As argument is not related to elasticsearch,
 # then assume that user wants to run his own process,
 # for example a `bash` shell to explore this image
