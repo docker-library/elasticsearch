@@ -1,1 +1,5 @@
 network.host: 0.0.0.0
+script.inline: on
+script.indexed: on
+script.file: on
+security.manager.enabled: false
