@@ -1,0 +1,25 @@
+machine:
+  timezone:
+    Europe/London
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+
+test:
+  override:
+    - docker build -t quiqup/elasticsearch .
+
+deployment:
+  master:
+    branch: master
+    commands:
+      - image="quiqup/elasticsearch"
+      - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
+      - docker build -t $image .
+      - mkdir -p ~/docker; docker save $image > ~/docker/image.tar
+
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push $image
