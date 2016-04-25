@@ -2,3 +2,6 @@ machine:
   services:
     - docker
 
+test:
+  override:
+    - docker build . && docker run .
