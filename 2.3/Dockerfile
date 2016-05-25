@@ -54,7 +54,7 @@ RUN plugin install license
 RUN plugin install shield
 
 #add default user
-RUN esusers useradd admin -p esadmin -r admin
+#RUN esusers useradd admin -p esadmin -r admin
 
 EXPOSE 9200 9300
 ENTRYPOINT ["/docker-entrypoint.sh"]
