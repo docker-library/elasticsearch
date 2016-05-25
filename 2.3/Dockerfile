@@ -53,7 +53,7 @@ RUN plugin install analysis-icu
 RUN plugin install license
 RUN plugin install shield
 
-add default user
+#add default user
 RUN /bin/shield/esusers useradd admin -p esadmin -r admin
 
 EXPOSE 9200 9300
