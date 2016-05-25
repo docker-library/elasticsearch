@@ -50,11 +50,8 @@ COPY docker-entrypoint.sh /
 
 # Install the required plugins
 RUN plugin install analysis-icu
-RUN plugin install license
-RUN plugin install shield
-
-#add default user
-#RUN esusers useradd admin -p esadmin -r admin
+#RUN plugin install license
+#RUN plugin install shield
 
 EXPOSE 9200 9300
 ENTRYPOINT ["/docker-entrypoint.sh"]
