@@ -53,7 +53,7 @@ RUN plugin install analysis-icu
 #RUN plugin install license
 #RUN plugin install shield
 RUN plugin install delete-by-query
-RUN plugin install repository-s3
+RUN plugin install cloud-aws
 
 EXPOSE 9200 9300
 ENTRYPOINT ["/docker-entrypoint.sh"]
