@@ -1,4 +1,4 @@
-FROM java:8-jre
+FROM openjdk:8-jre
 
 # grab gosu for easy step-down from root
 ENV GOSU_VERSION 1.7
