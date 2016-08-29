@@ -1,1 +1,5 @@
 network.host: 0.0.0.0
+script.engine.groovy.inline.aggs: on
+script.inline: true
+script.indexed: true
+
