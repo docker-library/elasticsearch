@@ -1,0 +1,13 @@
+elasticsearch:
+  image: elasticsearch:2.1.1
+#  volumes:
+#    - ./persistant_folder/data:/usr/share/elasticsearch/data
+#    - ./persistant_folder/logs:/usr/share/elasticsearch/logs
+#    - ./persistant_folder/plugins:/usr/share/elasticsearch/plugins
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+  environment:
+    - CLUSTER_NAME=elasticsearch
+    - NODE_NAME=Iron Man
+  restart: always  
