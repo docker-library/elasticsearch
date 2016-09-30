@@ -3,4 +3,6 @@ script.engine.groovy.inline.aggs: on
 script.engine.groovy.inline.search: on
 script.inline: on
 script.indexed: on
+http.cors.enabled: true
+http.cors.allow-origin: *
 
