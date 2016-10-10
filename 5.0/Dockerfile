@@ -14,11 +14,9 @@ RUN set -x \
 
 # https://www.elastic.co/guide/en/elasticsearch/reference/5.0/deb.html
 # https://artifacts.elastic.co/GPG-KEY-elasticsearch
-RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC8548582C1A2699A9D27D666CD88E42B4
-
-# add support for method of driver https
 RUN apt-get update \
     && apt-get install -y --no-install-recommends apt-transport-https \
+    && apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC8548582C1A2699A9D27D666CD88E42B4 \
     && rm -rf /var/lib/apt/lists/*
 
 ENV ELASTICSEARCH_VERSION 5.0.0-rc1
