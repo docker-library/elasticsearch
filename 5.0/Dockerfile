@@ -18,7 +18,8 @@ RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC85485
 
 # add support for method of driver https
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends apt-transport-https
+    && apt-get install -y --no-install-recommends apt-transport-https \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV ELASTICSEARCH_VERSION 5.0.0-rc1
 ENV ELASTICSEARCH_REPO_BASE https://artifacts.elastic.co/packages/5.x-prerelease/apt
