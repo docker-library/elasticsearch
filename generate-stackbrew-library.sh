@@ -4,7 +4,7 @@ set -eu
 declare -A aliases=(
 	[1.7]='1'
 	[2.4]='2 latest'
-	[5.0]='5'
+	[5.0-rc]='5'
 )
 
 self="$(basename "$BASH_SOURCE")"
@@ -55,13 +55,15 @@ for version in "${versions[@]}"; do
 
 	fullVersion="$(git show "$commit":"$version/Dockerfile" | awk '$1 == "ENV" && $2 == "ELASTICSEARCH_VERSION" { gsub(/~/, "-", $3); print $3; exit }')"
 
+	rcVersion="${version%-rc}"
+
 	versionAliases=()
-	while [ "$fullVersion" != "$version" -a "${fullVersion%[.-]*}" != "$fullVersion" ]; do
+	while [ "$fullVersion" != "$rcVersion" -a "${fullVersion%[.-]*}" != "$fullVersion" ]; do
 		versionAliases+=( $fullVersion )
 		fullVersion="${fullVersion%[.-]*}"
 	done
 	versionAliases+=(
-		$version
+		$rcVersion
 		${aliases[$version]:-}
 	)
 
