@@ -4,5 +4,5 @@ script.engine.groovy.inline.search: on
 script.inline: on
 script.indexed: on
 http.cors.enabled: true
-http.cors.allow-origin: *
+http.cors.allow-origin: "*"
 
