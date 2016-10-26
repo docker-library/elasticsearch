@@ -12,7 +12,7 @@ RUN set -x \
 	&& chmod +x /usr/local/bin/gosu \
 	&& gosu nobody true
 
-# https://packages.elasticsearch.org/GPG-KEY-elasticsearch
+# https://artifacts.elastic.co/GPG-KEY-elasticsearch
 RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC8548582C1A2699A9D27D666CD88E42B4
 
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-repositories.html
