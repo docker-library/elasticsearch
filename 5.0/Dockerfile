@@ -21,9 +21,14 @@ RUN set -x \
 	&& apt-get update && apt-get install -y --no-install-recommends apt-transport-https && rm -rf /var/lib/apt/lists/* \
 	&& echo 'deb https://artifacts.elastic.co/packages/5.x/apt stable main' > /etc/apt/sources.list.d/elasticsearch.list
 
-ENV ELASTICSEARCH_VERSION 5.0.1
+ENV ELASTICSEARCH_VERSION 5.0.2
 
 RUN set -x \
+	\
+# don't allow the package to install its sysctl file (causes the install to fail)
+# Failed to write '262144' to '/proc/sys/vm/max_map_count': Read-only file system
+	&& dpkg-divert --rename /usr/lib/sysctl.d/elasticsearch.conf \
+	\
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends elasticsearch=$ELASTICSEARCH_VERSION \
 	&& rm -rf /var/lib/apt/lists/*
