@@ -10,10 +10,13 @@ RUN apk add --no-cache 'su-exec>=0.2' bash
 # https://artifacts.elastic.co/GPG-KEY-elasticsearch
 ENV GPG_KEY 46095ACC8548582C1A2699A9D27D666CD88E42B4
 
-ENV ELASTICSEARCH_VERSION %%ELASTICSEARCH_VERSION%%
-
-ENV PATH /usr/share/elasticsearch/bin:$PATH
 WORKDIR /usr/share/elasticsearch
+ENV PATH /usr/share/elasticsearch/bin:$PATH
+
+ENV ELASTICSEARCH_VERSION %%ELASTICSEARCH_VERSION%%
+ENV ELASTICSEARCH_TARBALL="%%ELASTICSEARCH_TARBALL%%" \
+	ELASTICSEARCH_TARBALL_ASC="%%ELASTICSEARCH_TARBALL_ASC%%" \
+	ELASTICSEARCH_TARBALL_SHA1="%%ELASTICSEARCH_TARBALL_SHA1%%"
 
 RUN set -ex; \
 	\
@@ -24,19 +27,26 @@ RUN set -ex; \
 		tar \
 	; \
 	\
-	wget -O elasticsearch.tar.gz "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz"; \
+	wget -O elasticsearch.tar.gz "$ELASTICSEARCH_TARBALL"; \
 	\
-	wget -O elasticsearch.tar.gz.asc "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz.asc"; \
-	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY"; \
-	gpg --batch --verify elasticsearch.tar.gz.asc elasticsearch.tar.gz; \
-	rm -r "$GNUPGHOME" elasticsearch.tar.gz.asc; \
+	if [ "$ELASTICSEARCH_TARBALL_SHA1" ]; then \
+		echo "$ELASTICSEARCH_TARBALL_SHA1 *elasticsearch.tar.gz" | sha1sum -c -; \
+	fi; \
+	\
+	if [ "$ELASTICSEARCH_TARBALL_ASC" ]; then \
+		wget -O elasticsearch.tar.gz.asc "$ELASTICSEARCH_TARBALL_ASC"; \
+		export GNUPGHOME="$(mktemp -d)"; \
+		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY"; \
+		gpg --batch --verify elasticsearch.tar.gz.asc elasticsearch.tar.gz; \
+		rm -r "$GNUPGHOME" elasticsearch.tar.gz.asc; \
+	fi; \
 	\
 	tar -xf elasticsearch.tar.gz --strip-components=1; \
 	rm elasticsearch.tar.gz; \
 	\
 	apk del .fetch-deps; \
 	\
+	mkdir -p ./plugins; \
 	for path in \
 		./data \
 		./logs \
@@ -47,7 +57,13 @@ RUN set -ex; \
 		chown -R elasticsearch:elasticsearch "$path"; \
 	done; \
 	\
-	elasticsearch --version
+	if [ "${ELASTICSEARCH_VERSION%%.*}" -gt 1 ]; then \
+		elasticsearch --version; \
+	else \
+# elasticsearch 1.x doesn't support --version
+# but in 5.x, "-v" is verbose (and "-V" is --version)
+		elasticsearch -v; \
+	fi
 
 COPY config ./config
 
