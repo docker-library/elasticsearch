@@ -19,9 +19,10 @@ RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC85485
 # https://www.elastic.co/guide/en/elasticsearch/reference/5.0/deb.html
 RUN set -x \
 	&& apt-get update && apt-get install -y --no-install-recommends apt-transport-https && rm -rf /var/lib/apt/lists/* \
-	&& echo 'deb %%ELASTICSEARCH_REPO_BASE%% stable main' > /etc/apt/sources.list.d/elasticsearch.list
+	&& echo 'deb %%ELASTICSEARCH_DEB_REPO%% stable main' > /etc/apt/sources.list.d/elasticsearch.list
 
 ENV ELASTICSEARCH_VERSION %%ELASTICSEARCH_VERSION%%
+ENV ELASTICSEARCH_DEB_VERSION %%ELASTICSEARCH_DEB_VERSION%%
 
 RUN set -x \
 	\
@@ -30,7 +31,7 @@ RUN set -x \
 	&& dpkg-divert --rename /usr/lib/sysctl.d/elasticsearch.conf \
 	\
 	&& apt-get update \
-	&& apt-get install -y --no-install-recommends elasticsearch=$ELASTICSEARCH_VERSION \
+	&& apt-get install -y --no-install-recommends "elasticsearch=$ELASTICSEARCH_DEB_VERSION" \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
