@@ -10,8 +10,13 @@ fi
 # Drop root privileges if we are running elasticsearch
 # allow the container to be started with `--user`
 if [ "$1" = 'elasticsearch' -a "$(id -u)" = '0' ]; then
-	# Change the ownership of /usr/share/elasticsearch/data to elasticsearch
-	chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
+	# Change the ownership of user-mutable directories to elasticsearch
+	for path in \
+		/usr/share/elasticsearch/data \
+		/usr/share/elasticsearch/logs \
+	; do
+		chown -R elasticsearch:elasticsearch "$path"
+	done
 	
 	set -- gosu elasticsearch "$@"
 	#exec gosu elasticsearch "$BASH_SOURCE" "$@"
