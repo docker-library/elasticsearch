@@ -17,10 +17,10 @@ install:
 before_script:
   - env | sort
   - cd "$VERSION"
-  - image="elasticsearch:$VERSION"
+  - image="elasticsearch:${VERSION}${VARIANT:+-$VARIANT}"
 
 script:
-  - docker build -t "$image" .
+  - docker build -t "$image" "${VARIANT:-.}"
   - ~/official-images/test/run.sh "$image"
 
 after_script:
