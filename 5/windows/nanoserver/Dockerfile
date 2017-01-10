@@ -11,7 +11,7 @@ ENV JAVA_VERSION="1.8.0.111-3" `
 RUN Invoke-WebRequest $('https://github.com/ojdkbuild/ojdkbuild/releases/download/{0}/java-{1}.ojdkbuild.windows.x86_64.zip' -f $env:JAVA_VERSION, $env:JAVA_ZIP_VERSION) -OutFile 'openjdk.zip' -UseBasicParsing ; `
     if ((Get-FileHash openjdk.zip -Algorithm sha256).Hash -ne $env:JAVA_SHA256) {exit 1} ; `
     Expand-Archive openjdk.zip -DestinationPath C:\ ; `
-    mv "C:\java-$($env:JAVA_ZIP_VERSION).ojdkbuild.windows.x86_64" 'c:\openjdk'; `
+    Move-Item C:\java-$($env:JAVA_ZIP_VERSION).ojdkbuild.windows.x86_64 'c:\openjdk'; `
     Remove-Item -Path openjdk.zip
 
 # Elasticsearch
@@ -22,7 +22,7 @@ ENV ES_VERSION="5.1.1" `
 RUN Invoke-WebRequest -outfile elasticsearch.zip "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$($env:ES_VERSION).zip" -UseBasicParsing; `
     if ((Get-FileHash elasticsearch.zip -Algorithm sha1).Hash -ne $env:ES_SHA1) {exit 1} ; `
     Expand-Archive elasticsearch.zip -DestinationPath C:\ ; `
-    Move-Item "c:/elasticsearch-$($env:ES_VERSION)" 'c:\elasticsearch'; `
+    Move-Item c:/elasticsearch-$($env:ES_VERSION) 'c:\elasticsearch'; `
     Remove-Item elasticsearch.zip
 
 VOLUME c:/data
@@ -35,4 +35,5 @@ EXPOSE 9200 9300
 WORKDIR c:/elasticsearch
 COPY config ./config
 
+SHELL ["cmd", "/S", "/C"]
 CMD ".\bin\elasticsearch.bat"
