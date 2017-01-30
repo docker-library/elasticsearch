@@ -7,12 +7,14 @@ if [ "${1:0:1}" = '-' ]; then
 	set -- elasticsearch "$@"
 fi
 
+mkdir /opt/es-backup/
+
 # Drop root privileges if we are running elasticsearch
 # allow the container to be started with `--user`
 if [ "$1" = 'elasticsearch' -a "$(id -u)" = '0' ]; then
 	# Change the ownership of /usr/share/elasticsearch/data to elasticsearch
 	chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
-	
+    chown -R elasticsearch:elasticsearch /opt/es-backup/
 	set -- gosu elasticsearch "$@"
 	#exec gosu elasticsearch "$BASH_SOURCE" "$@"
 fi
