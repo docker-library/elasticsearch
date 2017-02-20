@@ -1,6 +1,6 @@
 # About this Repo
 
-This is the Git repo of the Docker [official image](https://docs.docker.com/docker-hub/official_repos/) for [elasticsearch](https://registry.hub.docker.com/_/elasticsearch/). See [the Docker Hub page](https://registry.hub.docker.com/_/elasticsearch/) for the full readme on how to use this Docker image and for information regarding contributing and issues.
+This is the Git repo of the Docker Hub [image](https://docs.docker.com/docker-hub/official_repos/) for [Elasticsearch](https://registry.hub.docker.com/_/elasticsearch/). See [the Docker Hub page](https://registry.hub.docker.com/_/elasticsearch/) for the full readme on how to use this Docker image and for information regarding contributing and issues. The Docker Hub image is not prepared in collaboration with nor supported by upstream [Elastic](https://elastic.co) which provides its [own official image](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html).
 
 The full readme is generated over in [docker-library/docs](https://github.com/docker-library/docs), specifically in [docker-library/docs/elasticsearch](https://github.com/docker-library/docs/tree/master/elasticsearch).
 
