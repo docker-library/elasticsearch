@@ -1,3 +1,9 @@
+# DEPRECATED
+
+This image is officially deprecated in favor of [the `elasticsearch` image provided by elastic.co](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html) which is available to pull via `docker.elastic.co/elasticsearch/elasticsearch:[version]` like `5.2.1`. This image will receive no further updates after 2017-06-20 (June 20, 2017). Please adjust your usage accordingly.
+
+Elastic provides open-source support for Elasticsearch via the [elastic/elasticsearch GitHub repository](https://github.com/elastic/elasticsearch) and the Docker image via the [elastic/elasticsearch-docker GitHub repository](https://github.com/elastic/elasticsearch-docker), as well as community support via its [forums](https://discuss.elastic.co/c/elasticsearch).
+
 # About this Repo
 
 This is the Git repo of the Docker Hub [image](https://docs.docker.com/docker-hub/official_repos/) for [Elasticsearch](https://registry.hub.docker.com/_/elasticsearch/). See [the Docker Hub page](https://registry.hub.docker.com/_/elasticsearch/) for the full readme on how to use this Docker image and for information regarding contributing and issues. The Docker Hub image is not prepared in collaboration with nor supported by upstream [Elastic](https://elastic.co) which provides its [own official image](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html).
