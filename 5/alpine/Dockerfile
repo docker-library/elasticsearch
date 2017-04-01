@@ -14,8 +14,8 @@ WORKDIR /usr/share/elasticsearch
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
 ENV ELASTICSEARCH_VERSION 5.3.0
-ENV ELASTICSEARCH_TARBALL="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.2.tar.gz" \
-	ELASTICSEARCH_TARBALL_ASC="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.2.tar.gz.asc" \
+ENV ELASTICSEARCH_TARBALL="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.3.0.tar.gz" \
+	ELASTICSEARCH_TARBALL_ASC="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.3.0.tar.gz.asc" \
 	ELASTICSEARCH_TARBALL_SHA1="2b19e0e334db8880e352c392a52d464be3d8bc0b"
 
 RUN set -ex; \
