@@ -27,8 +27,8 @@ RUN set -x \
 	&& apt-get update && apt-get install -y --no-install-recommends apt-transport-https && rm -rf /var/lib/apt/lists/* \
 	&& echo 'deb http://packages.elasticsearch.org/elasticsearch/2.x/debian stable main' > /etc/apt/sources.list.d/elasticsearch.list
 
-ENV ELASTICSEARCH_VERSION 2.4.4
-ENV ELASTICSEARCH_DEB_VERSION 2.4.4
+ENV ELASTICSEARCH_VERSION 2.4.5
+ENV ELASTICSEARCH_DEB_VERSION 2.4.5
 
 RUN set -x \
 	\
