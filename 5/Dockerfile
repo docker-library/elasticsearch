@@ -46,6 +46,9 @@ WORKDIR /usr/share/elasticsearch
 
 RUN set -ex \
 	&& for path in \
+        /es_data1 \
+        /es_data2 \
+        /es_data3 \
 		./data \
 		./logs \
 		./config \
