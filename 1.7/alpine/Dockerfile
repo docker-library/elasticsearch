@@ -38,7 +38,7 @@ RUN set -ex; \
 		export GNUPGHOME="$(mktemp -d)"; \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY"; \
 		gpg --batch --verify elasticsearch.tar.gz.asc elasticsearch.tar.gz; \
-		rm -r "$GNUPGHOME" elasticsearch.tar.gz.asc; \
+		rm -rf "$GNUPGHOME" elasticsearch.tar.gz.asc; \
 	fi; \
 	\
 	tar -xf elasticsearch.tar.gz --strip-components=1; \
