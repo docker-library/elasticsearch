@@ -23,9 +23,6 @@ for version in "${versions[@]}"; do
 	if [ "$majorVersion" -eq 2 ]; then
 		debRepo="http://packages.elasticsearch.org/elasticsearch/$aptBucket/debian"
 		tarballUrlBase='https://download.elastic.co/elasticsearch'
-	elif [ "$majorVersion" -eq 1 ]; then
-		debRepo="http://packages.elasticsearch.org/elasticsearch/$rcVersion/debian"
-		tarballUrlBase='https://download.elastic.co/elasticsearch'
 	fi
 
 	fullVersion="$(curl -fsSL "$debRepo/dists/stable/main/binary-amd64/Packages" | awk -F ': ' '$1 == "Package" { pkg = $2 } pkg == "elasticsearch" && $1 == "Version" && $2 ~ /^([0-9]+:)?'"$rcVersion"'/ { print $2 }' | sort -rV | head -n1)"
