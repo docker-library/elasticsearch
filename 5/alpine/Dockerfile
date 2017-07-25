@@ -13,10 +13,10 @@ ENV GPG_KEY 46095ACC8548582C1A2699A9D27D666CD88E42B4
 WORKDIR /usr/share/elasticsearch
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
-ENV ELASTICSEARCH_VERSION 5.5.0
-ENV ELASTICSEARCH_TARBALL="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.0.tar.gz" \
-	ELASTICSEARCH_TARBALL_ASC="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.0.tar.gz.asc" \
-	ELASTICSEARCH_TARBALL_SHA1="d79a3ade8b8589d13aeb99ceec1c54683596e88b"
+ENV ELASTICSEARCH_VERSION 5.5.1
+ENV ELASTICSEARCH_TARBALL="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.1.tar.gz" \
+	ELASTICSEARCH_TARBALL_ASC="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.1.tar.gz.asc" \
+	ELASTICSEARCH_TARBALL_SHA1="cb5648a6723527bdccee98caef7a9d08885a5b0f"
 
 RUN set -ex; \
 	\
