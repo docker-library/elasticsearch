@@ -1,5 +1,5 @@
-#!/bin/bash
-set -eu
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
 declare -A aliases=(
 	[2.4]='2'
@@ -55,7 +55,7 @@ join() {
 for version in "${versions[@]}"; do
 	commit="$(dirCommit "$version")"
 
-	fullVersion="$(git show "$commit":"$version/Dockerfile" | awk '$1 == "ENV" && $2 == "ELASTICSEARCH_VERSION" { gsub(/~/, "-", $3); print $3; exit }')"
+	fullVersion="$(git show "$commit":"$version/Dockerfile" | awk '$1 == "ENV" && $2 == "ELASTICSEARCH_VERSION" { gsub(/~/, "-", $3); print $3; exit } /artifacts.elastic.co\/downloads.*-oss-/ { print gensub(/^.+-oss-([0-9.]+)[.]tar.+$/, "\\1", 1); exit }')"
 
 	rcVersion="${version%-rc}"
 
