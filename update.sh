@@ -35,43 +35,59 @@ for version in "${versions[@]}"; do
 	plainVersion="${plainVersion##*:}" # strip epoch
 	tilde='~'; plainVersion="${plainVersion//$tilde/-}" # replace '~' with '-'
 
-	(
-		set -x
-		cp docker-entrypoint.sh "$version/"
-		sed '
-			s!%%ELASTICSEARCH_VERSION%%!'"$plainVersion"'!g;
-			s!%%ELASTICSEARCH_DEB_REPO%%!'"$debRepo"'!g;
-			s!%%ELASTICSEARCH_DEB_VERSION%%!'"$fullVersion"'!g;
-		' Dockerfile-debian.template > "$version/Dockerfile"
-	)
-
-	if [ -d "$version/alpine" ]; then
-		tarball="$tarballUrlBase/elasticsearch/elasticsearch-${plainVersion}.tar.gz"
-		tarballAsc="${tarball}.asc"
-		if ! wget --quiet --spider "$tarballAsc"; then
-			tarballAsc=
-		fi
-		tarballSha1=
-		for sha1Url in "${tarball}.sha1" "${tarball}.sha1.txt"; do
-			if sha1="$(wget -qO- "$sha1Url")"; then
-				tarballSha1="${sha1%% *}"
-				break
-			fi
-		done
+	if [ $majorVersion -ge 6 ]; then
+		# Use the "upstream" Dockerfile, which rebundles the existing image from Elastic.
+		upstreamImage="docker.elastic.co/elasticsearch/elasticsearch:$plainVersion"
+		docker pull $upstreamImage # so we can interrogate it for its image digest.
+		upstreamImageDigest=$(docker inspect --format='{{index .RepoDigests 0}}' $upstreamImage)
 		(
 			set -x
-			cp docker-entrypoint.sh "$version/alpine/"
-			sed -i 's/gosu/su-exec/g' "$version/alpine/docker-entrypoint.sh"
-			sed \
-				-e 's!%%ELASTICSEARCH_VERSION%%!'"$plainVersion"'!g' \
-				-e 's!%%ELASTICSEARCH_TARBALL%%!'"$tarball"'!g' \
-				-e 's!%%ELASTICSEARCH_TARBALL_ASC%%!'"$tarballAsc"'!g' \
-				-e 's!%%ELASTICSEARCH_TARBALL_SHA1%%!'"$tarballSha1"'!g' \
-				Dockerfile-alpine.template > "$version/alpine/Dockerfile"
+			sed '
+				s!%%ELASTICSEARCH_VERSION%%!'"$plainVersion"'!g;
+				s!%%UPSTREAM_IMAGE_DIGEST%%!'"$upstreamImageDigest"'!g;
+			' Dockerfile-upstream.template > "$version/Dockerfile"
 		)
-		travisEnv='\n  - VERSION='"$version VARIANT=alpine$travisEnv"
+		travisEnv='\n  - VERSION='"$version VARIANT=$travisEnv"
+	else
+		# Use the traditional build system where we build up the image ourselves.
+		(
+			set -x
+			cp docker-entrypoint.sh "$version/"
+			sed '
+				s!%%ELASTICSEARCH_VERSION%%!'"$plainVersion"'!g;
+				s!%%ELASTICSEARCH_DEB_REPO%%!'"$debRepo"'!g;
+				s!%%ELASTICSEARCH_DEB_VERSION%%!'"$fullVersion"'!g;
+			' Dockerfile-debian.template > "$version/Dockerfile"
+		)
+
+		if [ -d "$version/alpine" ]; then
+			tarball="$tarballUrlBase/elasticsearch/elasticsearch-${plainVersion}.tar.gz"
+			tarballAsc="${tarball}.asc"
+			if ! wget --quiet --spider "$tarballAsc"; then
+				tarballAsc=
+			fi
+			tarballSha1=
+			for sha1Url in "${tarball}.sha1" "${tarball}.sha1.txt"; do
+				if sha1="$(wget -qO- "$sha1Url")"; then
+					tarballSha1="${sha1%% *}"
+					break
+				fi
+			done
+			(
+				set -x
+				cp docker-entrypoint.sh "$version/alpine/"
+				sed -i 's/gosu/su-exec/g' "$version/alpine/docker-entrypoint.sh"
+				sed \
+					-e 's!%%ELASTICSEARCH_VERSION%%!'"$plainVersion"'!g' \
+					-e 's!%%ELASTICSEARCH_TARBALL%%!'"$tarball"'!g' \
+					-e 's!%%ELASTICSEARCH_TARBALL_ASC%%!'"$tarballAsc"'!g' \
+					-e 's!%%ELASTICSEARCH_TARBALL_SHA1%%!'"$tarballSha1"'!g' \
+					Dockerfile-alpine.template > "$version/alpine/Dockerfile"
+			)
+			travisEnv='\n  - VERSION='"$version VARIANT=alpine$travisEnv"
+		fi
+		travisEnv='\n  - VERSION='"$version VARIANT=$travisEnv"
 	fi
-	travisEnv='\n  - VERSION='"$version VARIANT=$travisEnv"
 done
 
 travis="$(awk -v 'RS=\n\n' '$1 == "env:" { $0 = "env:'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"
