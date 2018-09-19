@@ -38,8 +38,14 @@ for version in "${versions[@]}"; do
 	if [ $majorVersion -ge 6 ]; then
 		# Use the "upstream" Dockerfile, which rebundles the existing image from Elastic.
 		upstreamImage="docker.elastic.co/elasticsearch/elasticsearch:$plainVersion"
-		docker pull $upstreamImage # so we can interrogate it for its image digest.
-		upstreamImageDigest=$(docker inspect --format='{{index .RepoDigests 0}}' $upstreamImage)
+		
+		# Parse image manifest for sha
+		authToken="$(curl -fsSL 'https://docker-auth.elastic.co/auth?service=token-service&scope=repository:elasticsearch/elasticsearch:pull' | jq -r .token)"
+        digest="$(curl --head -fsSL -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' -H "Authorization: Bearer $authToken" "https://docker.elastic.co/v2/elasticsearch/elasticsearch/manifests/$plainVersion" | tr -d '\r' | gawk -F ':[[:space:]]+' '$1 == "Docker-Content-Digest" { print $2 }')"
+        
+        # Format image reference (image@sha)
+        upstreamImageDigest="$upstreamImage@$digest"
+        
 		(
 			set -x
 			sed '
