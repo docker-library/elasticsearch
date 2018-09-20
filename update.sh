@@ -3,11 +3,12 @@ set -e
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
-versions=( "$@" )
-if [ ${#versions[@]} -eq 0 ]; then
-	versions=( */ )
-fi
-versions=( "${versions[@]%/}" )
+#versions=( "$@" )
+#if [ ${#versions[@]} -eq 0 ]; then
+#	versions=( */ )
+#fi
+#versions=( "${versions[@]%/}" )
+versions=( 2.4 5 )
 
 travisEnv=
 for version in "${versions[@]}"; do
@@ -75,4 +76,4 @@ for version in "${versions[@]}"; do
 done
 
 travis="$(awk -v 'RS=\n\n' '$1 == "env:" { $0 = "env:'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"
-echo "$travis" > .travis.yml
+#echo "$travis" > .travis.yml
