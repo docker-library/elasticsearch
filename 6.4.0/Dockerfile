@@ -8,4 +8,4 @@ FROM docker.elastic.co/elasticsearch/elasticsearch:6.4.0@sha256:2244676001fa9b12
 
 # For a full list of supported images and tags visit https://www.docker.elastic.co
 
-# For Elasticsearch documentation visit https://www.elastic.co/guide/en/elasticsearch/reference/6.4.0/docker.html
+# For Elasticsearch documentation visit https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
