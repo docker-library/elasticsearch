@@ -4,7 +4,7 @@
 FROM %%UPSTREAM_IMAGE_DIGEST%%
 
 # The upstream image was built by:
-#   https://github.com/elastic/elasticsearch-docker/tree/%%ELASTICSEARCH_VERSION%%
+#   https://github.com/elastic/dockerfiles/tree/v%%ELASTICSEARCH_VERSION%%/elasticsearch
 
 # For a full list of supported images and tags visit https://www.docker.elastic.co
 
