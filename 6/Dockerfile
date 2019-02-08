@@ -4,7 +4,7 @@
 FROM docker.elastic.co/elasticsearch/elasticsearch:6.6.0@sha256:e9cba8dec2df88a1af911787f05cf5200a5d9d64e4517f64deb8bafc6e96176f
 
 # The upstream image was built by:
-#   https://github.com/elastic/elasticsearch-docker/tree/6.6.0
+#   https://github.com/elastic/dockerfiles/tree/v6.6.0/elasticsearch
 
 # For a full list of supported images and tags visit https://www.docker.elastic.co
 
