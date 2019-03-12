@@ -38,7 +38,7 @@ for version in "${versions[@]}"; do
 	if [ $majorVersion -ge 6 ]; then
 		# Use the "upstream" Dockerfile, which rebundles the existing image from Elastic.
 		upstreamImage="docker.elastic.co/elasticsearch/elasticsearch:$plainVersion"
-		
+
 		# Parse image manifest for sha
 		authToken="$(curl -fsSL 'https://docker-auth.elastic.co/auth?service=token-service&scope=repository:elasticsearch/elasticsearch:pull' | jq -r .token)"
 		digest="$(curl --head -fsSL -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' -H "Authorization: Bearer $authToken" "https://docker.elastic.co/v2/elasticsearch/elasticsearch/manifests/$plainVersion" | tr -d '\r' | gawk -F ':[[:space:]]+' '$1 == "Docker-Content-Digest" { print $2 }')"
@@ -46,11 +46,15 @@ for version in "${versions[@]}"; do
 		# Format image reference (image@sha)
 		upstreamImageDigest="$upstreamImage@$digest"
 
+		upstreamDockerfileLink="https://github.com/elastic/dockerfiles/tree/v$plainVersion/elasticsearch"
+
 		(
 			set -x
+			curl -fsSL -o /dev/null "$upstreamDockerfileLink" # make sure the upstream Dockerfile link exists
 			sed '
 				s!%%ELASTICSEARCH_VERSION%%!'"$plainVersion"'!g;
 				s!%%UPSTREAM_IMAGE_DIGEST%%!'"$upstreamImageDigest"'!g;
+				s!%%UPSTREAM_DOCKERFILE_LINK%%!'"$upstreamDockerfileLink"'!g;
 			' Dockerfile-upstream.template > "$version/Dockerfile"
 		)
 		travisEnv='\n  - VERSION='"$version VARIANT=$travisEnv"
