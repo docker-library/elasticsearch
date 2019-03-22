@@ -24,9 +24,8 @@ RUN set -ex; \
 		ca-certificates \
 		gnupg \
 		openssl \
-		tar \
-	; \
-	\
+		tar ; \
+	apk update; apk add ca-certificates wget ; update-ca-certificates; \
 	wget -O elasticsearch.tar.gz "$ELASTICSEARCH_TARBALL"; \
 	\
 	if [ "$ELASTICSEARCH_TARBALL_SHA1" ]; then \
