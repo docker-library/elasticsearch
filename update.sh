@@ -47,10 +47,12 @@ for version in "${versions[@]}"; do
 		upstreamImageDigest="$upstreamImage@$digest"
 
 		upstreamDockerfileLink="https://github.com/elastic/dockerfiles/tree/v$plainVersion/elasticsearch"
+		upstreamDockerfile="${upstreamDockerfileLink//tree/raw}/Dockerfile"
 
 		(
 			set -x
 			curl -fsSL -o /dev/null "$upstreamDockerfileLink" # make sure the upstream Dockerfile link exists
+			curl -fsSL "$upstreamDockerfile" | grep -P "\Q$plainVersion" # ... and that it contains the right version
 			sed '
 				s!%%ELASTICSEARCH_VERSION%%!'"$plainVersion"'!g;
 				s!%%UPSTREAM_IMAGE_DIGEST%%!'"$upstreamImageDigest"'!g;
