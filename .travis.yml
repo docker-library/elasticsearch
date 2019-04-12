@@ -2,6 +2,7 @@ language: bash
 services: docker
 
 env:
+  - VERSION=7 VARIANT=
   - VERSION=6 VARIANT=
   - VERSION=5 VARIANT=
   - VERSION=5 VARIANT=alpine
