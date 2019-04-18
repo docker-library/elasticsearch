@@ -1,9 +1,5 @@
-#!/bin/bash
-set -eu
-
-declare -A aliases=(
-	#[5]='latest'
-)
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
 self="$(basename "$BASH_SOURCE")"
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
@@ -56,23 +52,10 @@ for version in "${versions[@]}"; do
 
 	rcVersion="${version%-rc}"
 
-	versionAliases=()
-	if [ "${rcVersion%%.*}" -ge 6 ]; then
-		fullVersion="$(git show "$commit":"$version/Dockerfile" | awk '$1 == "FROM" && $2 ~ /^docker.elastic.co/ { gsub(/^[^:]+:|@.+$/, "", $2); print $2; exit }')"
-		versionAliases+=( $fullVersion )
-		# TODO decide whether to support X.Y aliases as well
-	else
-		fullVersion="$(git show "$commit":"$version/Dockerfile" | awk '$1 == "ENV" && $2 == "ELASTICSEARCH_VERSION" { gsub(/~/, "-", $3); print $3; exit }')"
+	fullVersion="$(git show "$commit":"$version/Dockerfile" | awk '$1 == "FROM" && $2 ~ /^docker.elastic.co/ { gsub(/^[^:]+:|@.+$/, "", $2); print $2; exit }')"
 
-		while [ "$fullVersion" != "$rcVersion" -a "${fullVersion%[.-]*}" != "$fullVersion" ]; do
-			versionAliases+=( $fullVersion )
-			fullVersion="${fullVersion%[.-]*}"
-		done
-		versionAliases+=(
-			$rcVersion
-			${aliases[$version]:-}
-		)
-	fi
+	versionAliases=( $fullVersion )
+	# TODO decide whether to support X.Y aliases as well
 
 	echo
 	cat <<-EOE
@@ -80,20 +63,4 @@ for version in "${versions[@]}"; do
 		GitCommit: $commit
 		Directory: $version
 	EOE
-
-	for variant in alpine; do
-		[ -f "$version/$variant/Dockerfile" ] || continue
-
-		commit="$(dirCommit "$version/$variant")"
-
-		variantAliases=( "${versionAliases[@]/%/-$variant}" )
-		variantAliases=( "${variantAliases[@]//latest-/}" )
-
-		echo
-		cat <<-EOE
-			Tags: $(join ', ' "${variantAliases[@]}")
-			GitCommit: $commit
-			Directory: $version/$variant
-		EOE
-	done
 done
