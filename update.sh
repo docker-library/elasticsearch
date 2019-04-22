@@ -61,7 +61,7 @@ for version in "${versions[@]}"; do
 		-e 's!%%UPSTREAM_DOCKERFILE_LINK%%!'"$upstreamDockerfileLink"'!g' \
 		Dockerfile.template > "$version/Dockerfile"
 
-	travisEnv='\n  - VERSION='"$version VARIANT=$travisEnv"
+	travisEnv='\n  - VERSION='"$version$travisEnv"
 done
 
 travis="$(awk -v 'RS=\n\n' '$1 == "env:" { $0 = "env:'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"
