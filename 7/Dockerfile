@@ -1,10 +1,10 @@
-# Elasticsearch 7.1.1
+# Elasticsearch 7.2.0
 
 # This image re-bundles the Docker image from the upstream provider, Elastic. 
-FROM docker.elastic.co/elasticsearch/elasticsearch:7.1.1@sha256:1084c64eed7d9318d028361c9aee398afdeb70d1816ce81d590b9450ec542c08
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.2.0@sha256:25859ce3c9a4ac9b669411d2aa09d436ba34d39c23f0e3b6b058d8a7a0a8d36a
 
 # The upstream image was built by:
-#   https://github.com/elastic/dockerfiles/tree/v7.1.1/elasticsearch
+#   https://github.com/elastic/dockerfiles/tree/v7.2.0/elasticsearch
 
 # For a full list of supported images and tags visit https://www.docker.elastic.co
 
