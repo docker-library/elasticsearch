@@ -1,6 +1,6 @@
 # Elasticsearch %%ELASTICSEARCH_VERSION%%
 
-# This image re-bundles the Docker image from the upstream provider, Elastic. 
+# This image re-bundles the Docker image from the upstream provider, Elastic.
 FROM %%UPSTREAM_IMAGE_DIGEST%%
 
 # The upstream image was built by:

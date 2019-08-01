@@ -1,6 +1,6 @@
 # Elasticsearch 6.8.2
 
-# This image re-bundles the Docker image from the upstream provider, Elastic. 
+# This image re-bundles the Docker image from the upstream provider, Elastic.
 FROM docker.elastic.co/elasticsearch/elasticsearch:6.8.2@sha256:e65762763532f9f6a860a33b30adcbbc0bfcda4a6c595040bbaea60180c012d3
 
 # The upstream image was built by:
