@@ -2,6 +2,7 @@
 
 # This image re-bundles the Docker image from the upstream provider, Elastic.
 FROM %%UPSTREAM_IMAGE_DIGEST%%
+# Supported Bashbrew Architectures: %%UPSTREAM_IMAGE_ARCHITECTURES%%
 
 # The upstream image was built by:
 #   %%UPSTREAM_DOCKERFILE_LINK%%

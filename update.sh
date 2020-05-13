@@ -46,10 +46,56 @@ for version in "${versions[@]}"; do
 
 	# Parse image manifest for sha
 	authToken="$(curl -fsSL "https://docker-auth.elastic.co/auth?service=token-service&scope=repository:$upstreamImageRepo:pull" | jq -r .token)"
-	digest="$(curl --head -fsSL -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' -H "Authorization: Bearer $authToken" "https://docker.elastic.co/v2/$upstreamImageRepo/manifests/$fullVersion" | tr -d '\r' | gawk -F ':[[:space:]]+' '$1 == "Docker-Content-Digest" { print $2 }')"
+	manifestList="$(
+		curl -D- -fsSL \
+			-H 'Accept: application/vnd.docker.distribution.manifest.list.v2+json' \
+			-H 'Accept: application/vnd.docker.distribution.manifest.v2+json' \
+			-H "Authorization: Bearer $authToken" \
+			"https://docker.elastic.co/v2/$upstreamImageRepo/manifests/$fullVersion" \
+			| tr -d '\r'
+	)"
+	digest="$(gawk -F ':[[:space:]]+' '$1 == "Docker-Content-Digest" { print $2; exit }' <<<"$manifestList")"
+	manifestList="$(gawk '/^$/ { pre = 1; next } pre { print }' <<<"$manifestList")"
 
 	# Format image reference (image@sha)
 	upstreamImageDigest="$upstreamImage@$digest"
+
+	schemaVersion="$(jq -r '.schemaVersion' <<<"$manifestList")"
+	[ "$schemaVersion" = 2 ] # sanity check
+	mediaType="$(jq -r '.mediaType' <<<"$manifestList")"
+	case "$mediaType" in
+		'application/vnd.docker.distribution.manifest.v2+json')
+			upstreamImageArchitectures='amd64'
+			;;
+
+		'application/vnd.docker.distribution.manifest.list.v2+json')
+			upstreamImageArchitectures="$(
+				jq -r '
+					.manifests[].platform
+					| if .os != "linux" then
+						.os + "-"
+					else "" end
+					+ if .architecture == "arm" then
+						"arm32"
+					elif .architecture == "386" then
+						"i386"
+					else .architecture end
+					+ if .variant then
+						.variant
+					elif .architecture == "arm64" then
+						"v8"
+					else "" end
+				' <<<"$manifestList" \
+				| sort -u \
+				| xargs
+			)"
+			;;
+
+		*)
+			echo >&2 "error: unknown media type on '$upstreamImageDigest': '$mediaType'"
+			exit 1
+			;;
+	esac
 
 	upstreamDockerfileTag="v$fullVersion"
 	upstreamDockerfileLink="https://github.com/elastic/dockerfiles/tree/$upstreamDockerfileTag/$upstreamProduct"
@@ -65,6 +111,7 @@ for version in "${versions[@]}"; do
 
 	sed -e 's!%%VERSION%%!'"$fullVersion"'!g' \
 		-e 's!%%UPSTREAM_IMAGE_DIGEST%%!'"$upstreamImageDigest"'!g' \
+		-e 's!%%UPSTREAM_IMAGE_ARCHITECTURES%%!'"$upstreamImageArchitectures"'!g' \
 		-e 's!%%UPSTREAM_DOCKERFILE_LINK%%!'"$upstreamDockerfileLink"'!g' \
 		-e 's!%%UPSTREAM_DOCKER_BUILD%%!'"$upstreamDockerBuild"'!g' \
 		Dockerfile.template > "$version/Dockerfile"
