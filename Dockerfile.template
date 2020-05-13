@@ -1,10 +1,13 @@
-# Elasticsearch %%ELASTICSEARCH_VERSION%%
+# Elasticsearch %%VERSION%%
 
 # This image re-bundles the Docker image from the upstream provider, Elastic.
 FROM %%UPSTREAM_IMAGE_DIGEST%%
 
 # The upstream image was built by:
 #   %%UPSTREAM_DOCKERFILE_LINK%%
+
+# The build can be reproduced locally via:
+#   docker build '%%UPSTREAM_DOCKER_BUILD%%'
 
 # For a full list of supported images and tags visit https://www.docker.elastic.co
 
