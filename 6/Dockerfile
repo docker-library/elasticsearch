@@ -1,10 +1,10 @@
-# Elasticsearch 6.8.8
+# Elasticsearch 6.8.9
 
 # This image re-bundles the Docker image from the upstream provider, Elastic.
-FROM docker.elastic.co/elasticsearch/elasticsearch:6.8.8@sha256:0e0fd27c4e133399d8c5419141915cbf04966aa808427f21bd316fb7c5bed61f
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.8.9@sha256:593b06516f44fddcaa1078cf67fcf128b603905d2c13efe4809e9b56c6d68351
 
 # The upstream image was built by:
-#   https://github.com/elastic/dockerfiles/tree/v6.8.8/elasticsearch
+#   https://github.com/elastic/dockerfiles/tree/v6.8.9/elasticsearch
 
 # For a full list of supported images and tags visit https://www.docker.elastic.co
 
