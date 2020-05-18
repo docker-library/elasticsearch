@@ -6,6 +6,9 @@ FROM docker.elastic.co/elasticsearch/elasticsearch:7.7.0@sha256:b4ec018c974d23a7
 # The upstream image was built by:
 #   https://github.com/elastic/dockerfiles/tree/v7.7.0/elasticsearch
 
+# The build can be reproduced locally via:
+#   docker build 'https://github.com/elastic/dockerfiles.git#v7.7.0:elasticsearch'
+
 # For a full list of supported images and tags visit https://www.docker.elastic.co
 
 # For Elasticsearch documentation visit https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html

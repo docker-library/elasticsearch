@@ -9,8 +9,12 @@ if [ ${#versions[@]} -eq 0 ]; then
 fi
 versions=( "${versions[@]%/}" )
 
+upstreamProduct='elasticsearch'
+
+upstreamDockerfileRepo='https://github.com/elastic/dockerfiles'
+
 tags="$(
-	git ls-remote --tags https://github.com/elastic/dockerfiles.git \
+	git ls-remote --tags "$upstreamDockerfileRepo.git" \
 		| cut -d/ -f3 \
 		| grep -E '^v' \
 		| cut -d^ -f1 \
@@ -37,16 +41,18 @@ for version in "${versions[@]}"; do
 
 	echo "$version: $fullVersion"
 
-	upstreamImage="docker.elastic.co/elasticsearch/elasticsearch:$fullVersion"
+	upstreamImageRepo="$upstreamProduct/$upstreamProduct"
+	upstreamImage="docker.elastic.co/$upstreamImageRepo:$fullVersion"
 
 	# Parse image manifest for sha
-	authToken="$(curl -fsSL 'https://docker-auth.elastic.co/auth?service=token-service&scope=repository:elasticsearch/elasticsearch:pull' | jq -r .token)"
-	digest="$(curl --head -fsSL -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' -H "Authorization: Bearer $authToken" "https://docker.elastic.co/v2/elasticsearch/elasticsearch/manifests/$fullVersion" | tr -d '\r' | gawk -F ':[[:space:]]+' '$1 == "Docker-Content-Digest" { print $2 }')"
+	authToken="$(curl -fsSL "https://docker-auth.elastic.co/auth?service=token-service&scope=repository:$upstreamImageRepo:pull" | jq -r .token)"
+	digest="$(curl --head -fsSL -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' -H "Authorization: Bearer $authToken" "https://docker.elastic.co/v2/$upstreamImageRepo/manifests/$fullVersion" | tr -d '\r' | gawk -F ':[[:space:]]+' '$1 == "Docker-Content-Digest" { print $2 }')"
 
 	# Format image reference (image@sha)
 	upstreamImageDigest="$upstreamImage@$digest"
 
-	upstreamDockerfileLink="https://github.com/elastic/dockerfiles/tree/v$fullVersion/elasticsearch"
+	upstreamDockerfileTag="v$fullVersion"
+	upstreamDockerfileLink="https://github.com/elastic/dockerfiles/tree/$upstreamDockerfileTag/$upstreamProduct"
 	upstreamDockerfile="${upstreamDockerfileLink//tree/raw}/Dockerfile"
 
 	(
@@ -55,8 +61,11 @@ for version in "${versions[@]}"; do
 		curl -fsSL "$upstreamDockerfile" | grep -P "\Q$fullVersion" # ... and that it contains the right version
 	)
 
-	sed -e 's!%%ELASTICSEARCH_VERSION%%!'"$fullVersion"'!g' \
+	upstreamDockerBuild="$upstreamDockerfileRepo.git#$upstreamDockerfileTag:$upstreamProduct"
+
+	sed -e 's!%%VERSION%%!'"$fullVersion"'!g' \
 		-e 's!%%UPSTREAM_IMAGE_DIGEST%%!'"$upstreamImageDigest"'!g' \
 		-e 's!%%UPSTREAM_DOCKERFILE_LINK%%!'"$upstreamDockerfileLink"'!g' \
+		-e 's!%%UPSTREAM_DOCKER_BUILD%%!'"$upstreamDockerBuild"'!g' \
 		Dockerfile.template > "$version/Dockerfile"
 done
