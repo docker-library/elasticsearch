@@ -57,9 +57,12 @@ for version in "${versions[@]}"; do
 	versionAliases=( $fullVersion )
 	# TODO decide whether to support X.Y aliases as well
 
+	versionArches="$(git show "$commit":"$version/Dockerfile" | awk -F ': ' '$1 == "# Supported Bashbrew Architectures" { print $2; exit }')"
+
 	echo
 	cat <<-EOE
 		Tags: $(join ', ' "${versionAliases[@]}")
+		Architectures: $(join ', ' $versionArches)
 		GitCommit: $commit
 		Directory: $version
 	EOE

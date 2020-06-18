@@ -2,6 +2,7 @@
 
 # This image re-bundles the Docker image from the upstream provider, Elastic.
 FROM docker.elastic.co/elasticsearch/elasticsearch:6.8.10@sha256:f8e21f6b2ef75dcda374da505fcb0ff4bf7e8d025f12096c498123fa4e372c1b
+# Supported Bashbrew Architectures: amd64
 
 # The upstream image was built by:
 #   https://github.com/elastic/dockerfiles/tree/v6.8.10/elasticsearch
