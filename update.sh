@@ -54,7 +54,7 @@ for version in "${versions[@]}"; do
 			"https://docker.elastic.co/v2/$upstreamImageRepo/manifests/$fullVersion" \
 			| tr -d '\r'
 	)"
-	digest="$(gawk -F ':[[:space:]]+' '$1 == "Docker-Content-Digest" { print $2; exit }' <<<"$manifestList")"
+	digest="$(gawk -F ':[[:space:]]+' 'tolower($1) == "docker-content-digest" { print $2; exit }' <<<"$manifestList")"
 	manifestList="$(gawk '/^$/ { pre = 1; next } pre { print }' <<<"$manifestList")"
 
 	# Format image reference (image@sha)
