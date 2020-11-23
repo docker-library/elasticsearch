@@ -44,13 +44,13 @@ jobs:
         run: |
           upstreamImage="$(awk '$1 == "FROM" { print $2; exit }' "$version/Dockerfile")"
           [ -n "$upstreamImage" ] # sanity check
-          echo "::set-env name=upstreamImage::$upstreamImage"
+          echo "upstreamImage=$upstreamImage" >> "$GITHUB_ENV"
           buildImage="$GITHUB_REPOSITORY:$version"
-          echo "::set-env name=buildImage::$buildImage"
+          echo "buildImage=$buildImage" >> "$GITHUB_ENV"
           dockerBuild="$(gawk '$1 == "#" && $2 == "docker" && $3 == "build" { gsub(/^#[[:space:]]+/, ""); print }' "$version/Dockerfile")"
           [ -n "$dockerBuild" ] # sanity check
           dockerBuild+=" --pull --tag '$buildImage'"
-          echo "::set-env name=dockerBuild::$dockerBuild"
+          echo "dockerBuild=$dockerBuild" >> "$GITHUB_ENV"
       - name: Pull
         run: |
           docker pull "$upstreamImage"
