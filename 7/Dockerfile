@@ -1,14 +1,14 @@
-# Elasticsearch 7.17.2
+# Elasticsearch 7.17.3
 
 # This image re-bundles the Docker image from the upstream provider, Elastic.
-FROM docker.elastic.co/elasticsearch/elasticsearch:7.17.2@sha256:4c00db03d6c357a2a9250a5477cc54b4cc72fef29098a2c3453456ee9248eb3b
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.17.3@sha256:8734ac48c10ff836a6d0c3d600297b453cb389e85fd26bb4ccb3d5a5bde7e554
 # Supported Bashbrew Architectures: amd64 arm64v8
 
 # The upstream image was built by:
-#   https://github.com/elastic/dockerfiles/tree/v7.17.2/elasticsearch
+#   https://github.com/elastic/dockerfiles/tree/v7.17.3/elasticsearch
 
 # The build can be reproduced locally via:
-#   docker build 'https://github.com/elastic/dockerfiles.git#v7.17.2:elasticsearch'
+#   docker build 'https://github.com/elastic/dockerfiles.git#v7.17.3:elasticsearch'
 
 # For a full list of supported images and tags visit https://www.docker.elastic.co
 
