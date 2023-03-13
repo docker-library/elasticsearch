@@ -18,7 +18,7 @@ jobs:
     outputs:
       versions: ${{ steps.generate.outputs.versions }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - id: generate
         name: Generate Matrix
         run: |
@@ -39,7 +39,7 @@ jobs:
     env:
       version: ${{ matrix.version }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Gather Data
         run: |
           upstreamImage="$(awk '$1 == "FROM" { print $2; exit }' "$version/Dockerfile")"
