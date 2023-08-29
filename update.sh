@@ -29,7 +29,7 @@ for version in "${versions[@]}"; do
 	fi
 
 	fullVersion="$(
-		grep -P "^\Qv$rcVersion" <<<"$tags" \
+		grep -P "^\Qv$rcVersion." <<<"$tags" \
 			| grep $rcGrepV -E -- '-(alpha|beta|rc)' \
 			| tail -1
 	)"
