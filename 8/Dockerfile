@@ -1,14 +1,14 @@
-# Elasticsearch 8.10.2
+# Elasticsearch 8.10.4
 
 # This image re-bundles the Docker image from the upstream provider, Elastic.
-FROM docker.elastic.co/elasticsearch/elasticsearch:8.10.2@sha256:d118fc05cfa714a4577731384ec8b08fe7e70c203a6949b0581e0f6ebe54b0af
+FROM docker.elastic.co/elasticsearch/elasticsearch:8.10.4@sha256:b2cc68c47ab95e8d3f2a60e7bceab1e45f58a22978351f3564431a1fbf6fe6ba
 # Supported Bashbrew Architectures: amd64 arm64v8
 
 # The upstream image was built by:
-#   https://github.com/elastic/dockerfiles/tree/v8.10.2/elasticsearch
+#   https://github.com/elastic/dockerfiles/tree/v8.10.4/elasticsearch
 
 # The build can be reproduced locally via:
-#   docker build 'https://github.com/elastic/dockerfiles.git#v8.10.2:elasticsearch'
+#   docker build 'https://github.com/elastic/dockerfiles.git#v8.10.4:elasticsearch'
 
 # For a full list of supported images and tags visit https://www.docker.elastic.co
 
